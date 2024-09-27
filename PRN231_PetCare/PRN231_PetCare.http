@@ -1,0 +1,6 @@
+@PRN231_PetCare_HostAddress = http://localhost:5211
+
+GET {{PRN231_PetCare_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
