@@ -11,9 +11,9 @@ namespace Domain.Entities
         public int AccountId { get; set; }
         public int? ShelterId { get; set; }  // Nullable because not all accounts may be linked to a shelter
         public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public string ?PasswordHash { get; set; }
         public string Role { get; set; }
-        public string RefreshToken { get; set; }
+        public string? RefreshToken { get; set; }
         public DateTime? TokenExpireDate { get; set; }
         public DateTime? TokenCreateDate { get; set; }
         public string EmailConfirmToken { get; set; }

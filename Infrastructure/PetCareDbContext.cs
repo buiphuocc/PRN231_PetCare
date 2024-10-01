@@ -2,22 +2,16 @@
 using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
     public class PetCareDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-        public PetCareDbContext( IConfiguration configuration)
+        public PetCareDbContext(DbContextOptions<PetCareDbContext> options)
+            : base(options)
         {
-            _configuration = configuration;
         }
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Cat> Cats { get; set; }
@@ -33,40 +27,21 @@ namespace Infrastructure
         public DbSet<Event> Events { get; set; }
         public DbSet<EventParticipation> EventParticipations { get; set; }
 
-        public PetCareDbContext(DbContextOptions<PetCareDbContext> options)
-        : base(options)
-        {
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(GetConnectionString());
-            }
-        }
-        private string GetConnectionString()
-        {
-            IConfiguration configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", true, true).Build();
-            return configuration["ConnectionStrings:Local"];
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration<UserProfile>(new UserProfileConfiguration());
-            modelBuilder.ApplyConfiguration<Cat>(new CatConfiguration());
-            modelBuilder.ApplyConfiguration<CatProfile>(new CatProfileConfiguration());
-            modelBuilder.ApplyConfiguration<AdoptionHistory>(new AdoptionHistoryConfiguration());
-            modelBuilder.ApplyConfiguration<Shelter>(new ShelterConfiguration());
-            modelBuilder.ApplyConfiguration<AdoptionApplication>(new AdoptionApplicationConfiguration());
-            modelBuilder.ApplyConfiguration<AdoptionContract>(new AdoptionContractConfiguration());
-            modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
-            modelBuilder.ApplyConfiguration<Donation>(new DonationConfiguration());
-            modelBuilder.ApplyConfiguration<Spending>(new SpendingConfiguration());
-            modelBuilder.ApplyConfiguration<VolunteerActivity>(new VolunteerActivityConfiguration());
-            modelBuilder.ApplyConfiguration<Event>(new EventConfiguration());
-            modelBuilder.ApplyConfiguration<EventParticipation>(new EventParticipationConfiguration());
+            modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new CatConfiguration());
+            modelBuilder.ApplyConfiguration(new CatProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new AdoptionHistoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ShelterConfiguration());
+            modelBuilder.ApplyConfiguration(new AdoptionApplicationConfiguration());
+            modelBuilder.ApplyConfiguration(new AdoptionContractConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new DonationConfiguration());
+            modelBuilder.ApplyConfiguration(new SpendingConfiguration());
+            modelBuilder.ApplyConfiguration(new VolunteerActivityConfiguration());
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
+            modelBuilder.ApplyConfiguration(new EventParticipationConfiguration());
         }
     }
 }
