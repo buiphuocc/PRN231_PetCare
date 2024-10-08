@@ -146,55 +146,70 @@ namespace Application.Services
         public async Task<TokenResponse<string>> LoginAsync(LoginUserDTO userObject)
         {
             var response = new TokenResponse<string>();
+
             try
             {
+                // Hash the incoming password
                 var passHash = HashPass.HashWithSHA256(userObject.PasswordHash);
-                var userLogin =
-                    await _unitOfWork.UserRepository.GetUserByEmailAddressAndPasswordHash(userObject.Email, passHash);
+
+                // Attempt to find the user with the provided credentials
+                var userLogin = await _unitOfWork.UserRepository.GetUserByEmailAddressAndPasswordHash(userObject.Email, passHash);
+
                 if (userLogin == null)
                 {
+                    // Invalid credentials
                     response.Success = false;
-                    response.Message = "Invalid username or password";
+                    response.Message = "Invalid username or password.";
                     return response;
                 }
 
-                if (userLogin.EmailConfirmToken != null && !userLogin.isActivated)
+                // Check if the user is activated
+                if (!userLogin.isActivated && userLogin.EmailConfirmToken != null)
                 {
                     response.Success = false;
-                    response.Message = "Please confirm via link in your mail";
+                    response.Message = "Please confirm your email.";
                     return response;
                 }
 
-                var auth = userLogin.Role;
-                var userId = userLogin.AccountId;
-                if (userLogin == null) throw new ArgumentNullException(nameof(userLogin));
-                if (_config == null) throw new ArgumentNullException(nameof(_config));
-                if (_config.JWTSection == null) throw new InvalidOperationException("JWTSection is not configured.");
-                if (string.IsNullOrEmpty(_config.JWTSection.SecretKey))
-                    throw new InvalidOperationException("SecretKey is not configured.");
+                // Generate access and refresh tokens
+                var accessToken = GenerateJsonWebTokenString.GenerateAccessToken(userLogin, _config);
+                var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
 
-                var token = userLogin.GenerateJsonWebToken(_config, _config.JWTSection.SecretKey, DateTime.Now);
+                // Store the refresh token in the database
+                userLogin.RefreshToken = refreshToken;
+                await _unitOfWork.UserRepository.Update(userLogin);
+
+                // Populate the response
                 response.Success = true;
-                response.Message = "Login successfully";
-                response.DataToken = token;
-                response.Role = auth;
-                response.HintId = userId;
+                response.Message = "Login successfully.";
+                response.DataToken = accessToken; // Store the access token in DataToken
+                response.RefreshToken = refreshToken; // Store the refresh token directly
+
+                return response;
             }
             catch (DbException ex)
             {
+                // Handle database error
                 response.Success = false;
                 response.Message = "Database error occurred.";
                 response.ErrorMessages = new List<string> { ex.Message };
+                // Log the exception for further analysis
+                return response;
             }
             catch (Exception ex)
             {
+                // Handle general error
                 response.Success = false;
-                response.Message = "Error";
+                response.Message = "An error occurred.";
                 response.ErrorMessages = new List<string> { ex.Message };
+                // Log the exception for further analysis
+                return response;
             }
-
-            return response;
         }
+
+        // Example of a logging method
+      
+
 
         public async Task<ServiceResponse<RegisterDTO>> RegisterAsync(RegisterDTO userObjectDTO)
         {
@@ -205,36 +220,44 @@ namespace Application.Services
                 if (existEmail)
                 {
                     response.Success = false;
-                    response.Message = "Email is already existed";
+                    response.Message = "Email already exists";
                     return response;
                 }
 
                 var userAccountRegister = _mapper.Map<Account>(userObjectDTO);
                 userAccountRegister.PasswordHash = HashPass.HashWithSHA256(userObjectDTO.Password);
-                //Create Token
+
+                // Create a token for email confirmation
                 userAccountRegister.EmailConfirmToken = Guid.NewGuid().ToString();
 
+                // Set initial activation status
                 userAccountRegister.isActivated = false;
                 userAccountRegister.Role = "Customer";
+
+                // Generate a refresh token
+                var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
+                userAccountRegister.RefreshToken = refreshToken; // Assuming you have a RefreshToken property in your Account entity
+
                 await _unitOfWork.UserRepository.AddAsync(userAccountRegister);
 
-                // link xac nhan tai khoan
-                var confirmationLink =
-                    $"https://bbone-cqa7fseyejf8a5dh.canadacentral-01.azurewebsites.net/confirm?token={userAccountRegister.EmailConfirmToken}";
-                //
-                //SendMail
-                var emailSend = await SendMail.SendConfirmationEmail(userObjectDTO.Email, confirmationLink);
-                if (!emailSend)
+                // Send email confirmation link
+                var confirmationLink = $"https://yourdomain.com/confirm?token={userAccountRegister.EmailConfirmToken}";
+                var emailSent = await SendMail.SendConfirmationEmail(userObjectDTO.Email, confirmationLink);
+                if (!emailSent)
                 {
                     response.Success = false;
-                    response.Message = "Error when send mail";
+                    response.Message = "Error when sending confirmation email";
                     return response;
                 }
 
-                var accountRegistedDTO = _mapper.Map<RegisterDTO>(userAccountRegister);
+                var accountRegisteredDTO = _mapper.Map<RegisterDTO>(userAccountRegister);
+
+                // Include refresh token in the response
                 response.Success = true;
-                response.Data = accountRegistedDTO;
-                response.Message = "Register successfully.";
+                response.Data = accountRegisteredDTO;
+                response.Message = "Registration successful.";
+                response.RefreshToken = refreshToken; // Include the refresh token in the response
+
             }
             catch (DbException e)
             {
@@ -251,6 +274,7 @@ namespace Application.Services
 
             return response;
         }
+
 
         public async Task<ServiceResponse<ResetPassDTO>> ResetPass(ResetPassDTO dto)
         {
@@ -354,5 +378,8 @@ namespace Application.Services
 
             return response;
         }
+
+
+
     }
 }

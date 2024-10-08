@@ -15,7 +15,7 @@ namespace Infrastructure.ServiceResponse
         public string? Hint { get; set; } = null;
         public double? PriceTotal { get; set; } = null;
         public List<string>? ErrorMessages { get; set; } = null;
-
+        public string RefreshToken { get; set; }
     }
 
     public class PaginationModel<T>
