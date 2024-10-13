@@ -152,6 +152,7 @@ namespace Application.Services
                 // Hash the incoming password
                 var passHash = HashPass.HashWithSHA256(userObject.PasswordHash);
 
+               
                 // Attempt to find the user with the provided credentials
                 var userLogin = await _unitOfWork.UserRepository.GetUserByEmailAddressAndPasswordHash(userObject.Email, passHash);
 
@@ -170,8 +171,9 @@ namespace Application.Services
                     response.Message = "Please confirm your email.";
                     return response;
                 }
-
+               // var userRole = await _unitOfWork.UserRepository.GetUserById(userLogin.AccountId);
                 // Generate access and refresh tokens
+                var token = GenerateJsonWebTokenString.GenerateJsonWebToken(userLogin, _config);
                 var accessToken = GenerateJsonWebTokenString.GenerateAccessToken(userLogin, _config);
                 var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
 
@@ -184,7 +186,7 @@ namespace Application.Services
                 response.Message = "Login successfully.";
                 response.DataToken = accessToken; // Store the access token in DataToken
                 response.RefreshToken = refreshToken; // Store the refresh token directly
-
+               // response.Role = userRole;
                 return response;
             }
             catch (DbException ex)
@@ -208,8 +210,10 @@ namespace Application.Services
         }
 
         // Example of a logging method
-      
 
+
+
+       
 
         public async Task<ServiceResponse<RegisterDTO>> RegisterAsync(RegisterDTO userObjectDTO)
         {
