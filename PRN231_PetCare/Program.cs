@@ -10,6 +10,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PRN231_PetCare;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,7 @@ builder.Services.Configure<AppConfiguration>(builder.Configuration);
 
 // Add custom services
 builder.Services.AddInfrastructuresService();
+    builder.Services.AddWebAPIService();
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile));
 builder.Services.AddMemoryCache();
 

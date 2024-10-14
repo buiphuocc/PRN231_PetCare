@@ -88,32 +88,39 @@ namespace Application.Services
             var result = new ServiceResponse<CatResDTO>();
             try
             {
+                // Check if a cat with the same name already exists
                 var catExist = await _Repo.GetCatByName(createForm.Name);
                 if (catExist != null)
                 {
                     result.Success = false;
-                    result.Message = "Cat with the same name already exist!";
+                    result.Message = "Cat with the same name already exists!";
+                    return result;
                 }
-                else
-                {
-                    var newCat = _mapper.Map<CatReqDTO, Cat>(createForm);
-                    newCat.CatId = 0;
-                    await _Repo.AddAsync(newCat);
-                    result.Data = new CatResDTO();
-                    result.Success = true;
-                    result.Message = "Cat created successfully!";
-                }
+
+                // Map DTO to entity
+                var newCat = _mapper.Map<Cat>(createForm);  // If AutoMapper is configured, this should work as expected
+
+                // Insert the new cat into the repository
+                await _Repo.AddAsync(newCat);
+
+                // After the entity is saved, return the saved entity's details
+                var savedCat = _mapper.Map<CatResDTO>(newCat);  // Map to response DTO
+
+                result.Data = savedCat;
+                result.Success = true;
+                result.Message = "Cat created successfully!";
             }
             catch (Exception e)
             {
                 result.Success = false;
                 result.Message = e.InnerException != null
-                    ? e.InnerException.Message + "\n" + e.StackTrace
-                    : e.Message + "\n" + e.StackTrace;
+                    ? $"{e.InnerException.Message}\n{e.StackTrace}"
+                    : $"{e.Message}\n{e.StackTrace}";
             }
 
             return result;
         }
+
 
         public async Task<ServiceResponse<CatResDTO>> Update(CatReqDTO updateForm, int catId)
         {

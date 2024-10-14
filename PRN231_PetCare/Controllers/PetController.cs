@@ -30,12 +30,16 @@ public class PetController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateCat([FromBody] CatReqDTO form)
     {
-        var createForm = new CatReqDTO();
+        if (form == null) // Check if the incoming form is null
+        {
+            return BadRequest("Request body is null");
+        }
 
-        var result = await _catService.Create(createForm);
+        var result = await _catService.Create(form); // Use the incoming DTO
 
         return result.Success ? Ok(result) : BadRequest(result);
     }
+
 
     // [Authorize(Roles = "Staff")]
     [HttpGet("{id}")]
