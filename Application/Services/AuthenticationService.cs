@@ -216,6 +216,7 @@ namespace Application.Services
 
                 userAccountRegister.isActivated = false;
                 userAccountRegister.Role = "Customer";
+                userAccountRegister.RefreshToken = Guid.NewGuid().ToString();//temporary for passing the not null criteria in db. Delete later
                 await _unitOfWork.UserRepository.AddAsync(userAccountRegister);
 
                 // link xac nhan tai khoan
