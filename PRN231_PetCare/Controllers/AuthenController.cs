@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PRN231_PetCare.Controllers
 {
-    //[EnableCors("Allow")]
+    [EnableCors("Allow")]
     [Route("api/authentication")]
     [ApiController]
     public class AuthenController : BaseController
@@ -102,6 +102,7 @@ namespace PRN231_PetCare.Controllers
                         success = result.Success,
                         message = result.Message,
                         token = result.DataToken,
+                        refeshtoken = result.RefreshToken,
                         role = result.Role,
                         hint = result.HintId,
                     }

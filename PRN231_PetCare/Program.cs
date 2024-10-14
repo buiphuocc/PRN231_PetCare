@@ -10,6 +10,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PRN231_PetCare;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,17 @@ builder.Configuration.AddJsonFile("appsettings.Development.json", optional: fals
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,6 +44,7 @@ builder.Services.Configure<AppConfiguration>(builder.Configuration);
 
 // Add custom services
 builder.Services.AddInfrastructuresService();
+    builder.Services.AddWebAPIService();
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile));
 builder.Services.AddMemoryCache();
 
@@ -57,13 +70,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
+    options.AddPolicy("Customer", policy => policy.RequireRole("Customer"));
+});
+
 // Configure Swagger for JWT authentication and XML documentation
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "BBone.API",
+        Title = "PetCare.API",
     });
 
     // Add JWT authentication support in Swagger
@@ -104,6 +124,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting(); // Ensure routing is enabled
+
+// Enable CORS
+app.UseCors("AllowAll"); // Use the CORS policy defined earlier
+
 app.UseAuthentication(); // Add authentication middleware
 app.UseAuthorization();
 

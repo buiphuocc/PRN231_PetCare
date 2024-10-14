@@ -23,6 +23,11 @@ namespace Infrastructure
 
 
 
+            services.AddScoped<ICatRepo, CatRepo>();
+
+
+
+
             //services.AddDbContext<AppDbContext>(option => option.UseSqlServer(databaseConnection));
             return services;
         }

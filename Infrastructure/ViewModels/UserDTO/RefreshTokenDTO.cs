@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.ViewModels.UserDTO
 {
-    public class RegisterDTO
+    public class RefreshTokenDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string TelephoneNumber { get; set; }
-
-        
+        public string RefreshToken { get; set; }
     }
 }

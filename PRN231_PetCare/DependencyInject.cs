@@ -1,5 +1,6 @@
 ﻿using Application;
-
+using Application.Services;
+using Application.IService;
 using Infrastructure;
 using Infrastructure.IRepositories;
 using Infrastructure.Repositories;
@@ -24,11 +25,12 @@ namespace PRN231_PetCare
             services.AddSingleton<Stopwatch>();
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            //services.AddScoped<IAuthenticationService, AuthenticationService>();
             //services.AddSingleton<ICurrentTime, CurrentTime>();
             //services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<ICatService, CatService>();
 
-          
+
             services.AddHttpContextAccessor();
 
 
