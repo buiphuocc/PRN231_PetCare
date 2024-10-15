@@ -24,6 +24,7 @@ namespace Infrastructure
 
 
             services.AddScoped<ICatRepo, CatRepo>();
+            services.AddScoped<ICatProfileRepo, CatProfileRepo>();
 
 
 
