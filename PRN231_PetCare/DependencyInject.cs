@@ -29,7 +29,7 @@ namespace PRN231_PetCare
             //services.AddSingleton<ICurrentTime, CurrentTime>();
             //services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<ICatService, CatService>();
-
+            services.AddScoped<ICatProfileService, CatProfileService>();
 
             services.AddHttpContextAccessor();
 
