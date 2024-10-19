@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using Domain.Entities;
+using Infrastructure.ViewModels.AdoptionContractDTO;
 using Infrastructure.ViewModels.CatDTO;
 using Infrastructure.ViewModels.CatProfileDTO;
 using Infrastructure.ViewModels.UserDTO;
@@ -30,6 +31,9 @@ namespace Infrastructure.Mappers
 
             CreateMap<CatProfile, CatProfileReqDTO>().ReverseMap();
             CreateMap<CatProfile, CatProfileReSDTO>().ReverseMap();
+
+            CreateMap<AdoptionContract, AdoptionContractReq>().ReverseMap();
+            CreateMap<AdoptionContract, AdoptionContractRes>().ReverseMap();
 
 
 
