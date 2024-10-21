@@ -237,15 +237,11 @@ namespace Application.Services
                 // Set initial activation status
                 userAccountRegister.isActivated = false;
                 userAccountRegister.Role = "Customer";
-<<<<<<< HEAD
-                userAccountRegister.RefreshToken = Guid.NewGuid().ToString();//temporary for passing the not null criteria in db. Delete later
-=======
 
                 // Generate a refresh token
                 var refreshToken = GenerateJsonWebTokenString.GenerateRefreshToken();
                 userAccountRegister.RefreshToken = refreshToken; // Assuming you have a RefreshToken property in your Account entity
 
->>>>>>> 86db78faf9ed8cb6032a39c0b3fadb63f8ab85d2
                 await _unitOfWork.UserRepository.AddAsync(userAccountRegister);
 
                 // Send email confirmation link

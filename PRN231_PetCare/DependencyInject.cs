@@ -39,7 +39,8 @@ namespace PRN231_PetCare
   
             //services.AddScoped, ProductService>();
 
-
+            services.AddScoped<IAppointmentRepo, AppointmentRepo>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
 
 
 
