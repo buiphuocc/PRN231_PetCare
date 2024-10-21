@@ -52,7 +52,71 @@ namespace PRN231_PetCare.Controllers
                 
         }
 
-        [HttpGet("purposes-droption")]
+        [HttpGet("{appointmentId}")]
+        public async Task<IActionResult> GetAppointmentById([Required] int appointmentId)
+        {
+            if (appointmentId == null) BadRequest("appointmentId required");
+            try
+            {
+
+
+                var response = await _appointmentService.GetAppointmentById(appointmentId);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("get-all-appointment")]
+        public async Task<IActionResult> GetAppointments()
+        {
+            try
+            {
+                var response = await _appointmentService.GetAllAppointments();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("delete-appointment/{appointmentId}")]
+        public async Task<IActionResult> DeleteAppointments([Required] int appointmentId)
+        {
+            try
+            {
+                var response = await _appointmentService.DeleteAppointmentById(appointmentId);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("update-appointment")]
+        public async Task<IActionResult> UpdateAppointments([FromBody] AppointmentDTO appointmentDto)
+        {
+            try
+            {
+                var response = await _appointmentService.UpdateAppointment(appointmentDto);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+        [HttpGet("purposes-dropdown-option")]
         public IActionResult GetPurposeDropdownOptions()
         {
             return Ok(AppointmentPurposesString.Options);
