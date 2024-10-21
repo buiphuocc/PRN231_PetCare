@@ -2,7 +2,11 @@
 
 using AutoMapper;
 using Domain.Entities;
+<<<<<<< HEAD
 using Infrastructure.ViewModels.AppointmentDTO;
+=======
+using Infrastructure.ViewModels.AdoptionContractDTO;
+>>>>>>> 7396df76550920aa387cec33bc495436f82a26c9
 using Infrastructure.ViewModels.CatDTO;
 using Infrastructure.ViewModels.CatProfileDTO;
 using Infrastructure.ViewModels.UserDTO;
@@ -32,7 +36,12 @@ namespace Infrastructure.Mappers
             CreateMap<CatProfile, CatProfileReqDTO>().ReverseMap();
             CreateMap<CatProfile, CatProfileReSDTO>().ReverseMap();
 
+<<<<<<< HEAD
             CreateMap<Appointment, AppointmentDTO>().ReverseMap();
+=======
+            CreateMap<AdoptionContract, AdoptionContractReq>().ReverseMap();
+            CreateMap<AdoptionContract, AdoptionContractRes>().ReverseMap();
+>>>>>>> 7396df76550920aa387cec33bc495436f82a26c9
 
 
 

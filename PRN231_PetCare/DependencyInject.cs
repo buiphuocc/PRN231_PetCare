@@ -30,6 +30,7 @@ namespace PRN231_PetCare
             //services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<ICatService, CatService>();
             services.AddScoped<ICatProfileService, CatProfileService>();
+            services.AddScoped<IAdoptionContractService, AdoptionContractService>();
 
             services.AddHttpContextAccessor();
 
