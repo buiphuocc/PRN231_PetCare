@@ -43,7 +43,8 @@ namespace PRN231_PetCare
             services.AddScoped<IAppointmentRepo, AppointmentRepo>();
             services.AddScoped<IAppointmentService, AppointmentService>();
 
-
+            services.AddScoped<IAdoptionApplicationRepo, AdoptionApplicationRepo>();
+            services.AddScoped<IAdoptionApplicationService, AdoptionApplicationService>();
 
 
 

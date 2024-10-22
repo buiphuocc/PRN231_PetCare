@@ -18,9 +18,9 @@ namespace Infrastructure
         public DbSet<CatProfile> CatProfiles { get; set; }
         public DbSet<AdoptionHistory> AdoptionHistories { get; set; }
         public DbSet<Shelter> Shelters { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
         public DbSet<AdoptionApplication> AdoptionApplications { get; set; }
         public DbSet<AdoptionContract> AdoptionContracts { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Donation> Donations { get; set; }
         public DbSet<Spending> Spendings { get; set; }
         public DbSet<VolunteerActivity> VolunteerActivities { get; set; }

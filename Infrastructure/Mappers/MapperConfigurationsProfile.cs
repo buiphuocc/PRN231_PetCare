@@ -7,6 +7,7 @@ using Infrastructure.ViewModels.AdoptionContractDTO;
 using Infrastructure.ViewModels.CatDTO;
 using Infrastructure.ViewModels.CatProfileDTO;
 using Infrastructure.ViewModels.UserDTO;
+using Infrastructure.ViewModels.AdoptionApplicationDTO;
 
 namespace Infrastructure.Mappers
 {
@@ -38,13 +39,13 @@ namespace Infrastructure.Mappers
             CreateMap<AdoptionContract, AdoptionContractReq>().ReverseMap();
             CreateMap<AdoptionContract, AdoptionContractRes>().ReverseMap();
 
+            CreateMap<AdoptionApplication, AdoptionApplicationReq>().ReverseMap();
+			CreateMap<AdoptionApplication, AdoptionApplicationRes>().ReverseMap();
 
 
 
 
-
-
-        }
+		}
     }
 }
 
