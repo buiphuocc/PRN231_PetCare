@@ -12,10 +12,10 @@ namespace Application.IService
 {
     public interface IAdoptionContractService
     {
-        Task<ServiceResponse<List<AdoptionContractRes>>> GetAllAdoptionContractsAsync();
+        Task<ServiceResponse<List<AdoptionContractRes>>> GetAllAdoptionContractsAsync(int pageNumber, int pageSize);
         Task<ServiceResponse<AdoptionContractRes>> GetAdoptionContractByIdAsync(int id);
         Task<ServiceResponse<AdoptionContractRes>> CreateAdoptionContract(AdoptionContractReq adoptionContract);
-        Task<ServiceResponse<bool>> Delete(int id);
+        Task<ServiceResponse<bool>> DeleteAdoptionContract(int id);
         Task<ServiceResponse<AdoptionContractRes>> UpdateAdoptionContract(AdoptionContractReq adoptionContract, int id);
     }
 }

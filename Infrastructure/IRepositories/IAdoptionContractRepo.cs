@@ -9,7 +9,7 @@ namespace Infrastructure.IRepositories
 {
     public interface IAdoptionContractRepo : IGenericRepo<AdoptionContract>
     {
-        Task<List<AdoptionContract>> GetAllAdoptionContracts();
+        Task<List<AdoptionContract>> GetAllAdoptionContracts(int pageNumber, int pageSize);
         Task<AdoptionContract> GetAdoptionContractById(int id);
         Task<AdoptionContract> GetAdoptionContractByApplicationId(int id);
     }

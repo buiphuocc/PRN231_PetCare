@@ -23,18 +23,16 @@ namespace Application.Services
             _repo = repo;
             _mapper = mapper;
         }
-        public async Task<ServiceResponse<List<AdoptionContractRes>>> GetAllAdoptionContractsAsync()
+        public async Task<ServiceResponse<List<AdoptionContractRes>>> GetAllAdoptionContractsAsync(int pageNumber, int pageSize)
         {
             var result = new ServiceResponse<List<AdoptionContractRes>>();
             try
             {
-                // Fetch all Cat entities from the repository with pagination
-                var contractEntities = await _repo.GetAllAdoptionContracts();
+                var contractEntities = await _repo.GetAllAdoptionContracts(pageNumber, pageSize);
 
-                // Use AutoMapper to map entities to DTOs
-                var adoptionList = _mapper.Map<List<AdoptionContractRes>>(contractEntities);
+                var adoptionContractsList = _mapper.Map<List<AdoptionContractRes>>(contractEntities);
 
-                result.Data = adoptionList;
+                result.Data = adoptionContractsList;
                 result.Success = true;
             }
             catch (Exception e)
@@ -46,7 +44,6 @@ namespace Application.Services
             }
 
             return result;
-
         }
 
         public async Task<ServiceResponse<AdoptionContractRes>> CreateAdoptionContract(AdoptionContractReq adoptionContract)
@@ -54,27 +51,26 @@ namespace Application.Services
             var result = new ServiceResponse<AdoptionContractRes>();
             try
             {
-                // Check if a cat with the same name already exists
-                var catExist = await _repo.GetAdoptionContractByApplicationId(adoptionContract.ApplicationId);
-                if (catExist != null)
+                var applicationExist = await _repo.GetAdoptionContractByApplicationId(adoptionContract.ApplicationId);
+                if (applicationExist != null)
                 {
                     result.Success = false;
-                    result.Message = "Cat with the same id already exists!";
+                    result.Message = "Application with the same id already exists!";
                     return result;
                 }
 
                 // Map DTO to entity
-                var newCat = _mapper.Map<AdoptionContract>(adoptionContract);  // If AutoMapper is configured, this should work as expected
+                var newContract = _mapper.Map<AdoptionContract>(adoptionContract);  // If AutoMapper is configured, this should work as expected
 
                 // Insert the new cat into the repository
-                await _repo.AddAsync(newCat);
+                await _repo.AddAsync(newContract);
 
                 // After the entity is saved, return the saved entity's details
-                var savedCat = _mapper.Map<AdoptionContractRes>(newCat);  // Map to response DTO
+                var savedContract = _mapper.Map<AdoptionContractRes>(newContract);  // Map to response DTO
 
-                result.Data = savedCat;
+                result.Data = savedContract;
                 result.Success = true;
-                result.Message = "Cat Profile created successfully!";
+                result.Message = "Adoption Contract created successfully!";
             }
             catch (Exception e)
             {
@@ -87,22 +83,22 @@ namespace Application.Services
             return result;
         }
 
-        public async Task<ServiceResponse<bool>> Delete(int catId)
+        public async Task<ServiceResponse<bool>> DeleteAdoptionContract(int id)
         {
             var result = new ServiceResponse<bool>();
 
             try
             {
-                var catExist = await _repo.GetAdoptionContractById(catId);
-                if (catExist == null)
+                var contractExist = await _repo.GetAdoptionContractById(id);
+                if (contractExist == null)
                 {
                     result.Success = false;
-                    result.Message = "Cat profile not found";
+                    result.Message = "Adoption Contract not found";
                     result.Data = false;
                 }
                 else
                 {
-                    await _repo.Remove(catExist);
+                    await _repo.Remove(contractExist);
                     result.Success = true;
                     result.Message = "Deleted successfully";
                     result.Data = true;  // Deletion successful
@@ -123,15 +119,15 @@ namespace Application.Services
             var result = new ServiceResponse<AdoptionContractRes>();
             try
             {
-                var cat = await _repo.GetAdoptionContractById(id);
-                if (cat == null)
+                var contract = await _repo.GetAdoptionContractById(id);
+                if (contract == null)
                 {
                     result.Success = false;
                     result.Message = "Adoption Contract not found";
                 }
                 else
                 {
-                    var resMaterial = _mapper.Map<AdoptionContract, AdoptionContractRes>(cat);
+                    var resMaterial = _mapper.Map<AdoptionContract, AdoptionContractRes>(contract);
 
                     result.Data = resMaterial;
                     result.Success = true;
@@ -157,16 +153,24 @@ namespace Application.Services
                 ArgumentNullException.ThrowIfNull(adoptionContract);
 
                 // Fetch the existing cat entity from the repository
-                var catUpdate = await _repo.GetAdoptionContractById(id)
+                var contractUpdate = await _repo.GetAdoptionContractById(id)
                                  ?? throw new ArgumentException("Adoption Contract doesn't exist!");
 
-                // Use AutoMapper to map the DTO to the existing entity
-                _mapper.Map(adoptionContract, catUpdate); // Update properties in catUpdate with values from updateForm
+                var applicationExist = await _repo.GetAdoptionContractByApplicationId(adoptionContract.ApplicationId);
+                if (applicationExist != null)
+                {
+                    result.Success = false;
+                    result.Message = "Application with the same id already exists!";
+                    return result;
+                }
 
-                await _repo.Update(catUpdate); // Assuming _Repo.Update saves changes to the database
+                // Use AutoMapper to map the DTO to the existing entity
+                _mapper.Map(adoptionContract, contractUpdate); // Update properties in catUpdate with values from updateForm
+
+                await _repo.Update(contractUpdate); // Assuming _Repo.Update saves changes to the database
 
                 // Optionally return the updated DTO
-                result.Data = _mapper.Map<AdoptionContractRes>(catUpdate);
+                result.Data = _mapper.Map<AdoptionContractRes>(contractUpdate);
                 result.Success = true;
                 result.Message = "Updated Adoption Contract successfully";
             }
