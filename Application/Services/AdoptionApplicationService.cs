@@ -125,7 +125,7 @@ namespace Application.Services
 				}
 				else
 				{
-					await _repo.DeleteAsync(id);
+					await _repo.Remove(applicationCheck);
 
 					result.Success = true;
 					result.Message = "Deleted successfully";
@@ -156,7 +156,7 @@ namespace Application.Services
 				// Use AutoMapper to map the DTO to the existing entity
 				_mapper.Map(req, applicationUpdate); // Update properties in catUpdate with values from updateForm
 
-				await _repo.UpdateAsync(applicationUpdate); // Assuming _Repo.Update saves changes to the database
+				await _repo.Update(applicationUpdate); // Assuming _Repo.Update saves changes to the database
 
 				// Optionally return the updated DTO
 				result.Data = _mapper.Map<AdoptionApplicationRes>(applicationUpdate);

@@ -31,11 +31,12 @@ namespace Infrastructure.Repositories
 			}
 		}
 
-		public async Task DeleteAsync(int id)
+		public async Task Remove(AdoptionApplication adoptionApplication)
 		{
 			try
 			{
-				var adoptionApplication = await _context.AdoptionApplications.FindAsync(id) ?? throw new Exception("Application with this ID was not found.");
+				if (await _context.AdoptionApplications.FindAsync(adoptionApplication) == null)
+					throw new Exception("Application with this ID was not found.");
 				
 				_context.AdoptionApplications.Remove(adoptionApplication);
 				await _context.SaveChangesAsync();
@@ -87,7 +88,7 @@ namespace Infrastructure.Repositories
 			}
 		}
 
-		public async Task<IEnumerable<AdoptionApplication>> GetAllAsync()
+		public async Task<List<AdoptionApplication>> GetAllAsync()
 		{
 			try
 			{
@@ -114,12 +115,27 @@ namespace Infrastructure.Repositories
 			}
 		}
 
-		public async Task UpdateAsync(AdoptionApplication adoptionApplication)
+		public async Task Update(AdoptionApplication adoptionApplication)
 		{
 			try
 			{
 				if (await _context.AdoptionApplications.FindAsync(adoptionApplication) == null) throw new Exception("Application does not exist.");
 				
+				_context.AdoptionApplications.Update(adoptionApplication);
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async void UpdateE(AdoptionApplication adoptionApplication)
+		{
+			try
+			{
+				if (await _context.AdoptionApplications.FindAsync(adoptionApplication) == null) throw new Exception("Application does not exist.");
+
 				_context.AdoptionApplications.Update(adoptionApplication);
 				await _context.SaveChangesAsync();
 			}
