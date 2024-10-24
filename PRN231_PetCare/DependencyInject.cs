@@ -45,6 +45,8 @@ namespace PRN231_PetCare
 
             services.AddScoped<IAdoptionApplicationRepo, AdoptionApplicationRepo>();
             services.AddScoped<IAdoptionApplicationService, AdoptionApplicationService>();
+            services.AddScoped<IShelterRepo, ShelterRepo>();
+            services.AddScoped<IShelterService, ShelterService>();
 
 
 

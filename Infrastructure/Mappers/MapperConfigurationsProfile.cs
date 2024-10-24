@@ -8,6 +8,7 @@ using Infrastructure.ViewModels.CatDTO;
 using Infrastructure.ViewModels.CatProfileDTO;
 using Infrastructure.ViewModels.UserDTO;
 using Infrastructure.ViewModels.AdoptionApplicationDTO;
+using Infrastructure.ViewModels.ShelterDTO;
 
 namespace Infrastructure.Mappers
 {
@@ -42,6 +43,8 @@ namespace Infrastructure.Mappers
             CreateMap<AdoptionApplication, AdoptionApplicationReq>().ReverseMap();
 			CreateMap<AdoptionApplication, AdoptionApplicationRes>().ReverseMap();
 
+            CreateMap<Shelter, ShelterReqDTO>().ReverseMap();
+            CreateMap<Shelter, ShelterResDTO>().ReverseMap();
 
 
 

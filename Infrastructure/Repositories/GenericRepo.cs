@@ -13,14 +13,15 @@ namespace Infrastructure.Repositories
             this.context = context;
             _dbSet = context.Set<T>();                   
         }
-        public Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
+           
         }
 
-        public Task<T?> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
         public async Task AddAsync(T entity)
