@@ -16,9 +16,11 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<List<AdoptionContract>> GetAllAdoptionContracts()
+        public async Task<List<AdoptionContract>> GetAllAdoptionContracts(int pageNumber, int pageSize)
         {
-            return await _context.AdoptionContracts.ToListAsync();
+            return await _context.AdoptionContracts.Skip((pageNumber - 1) * pageSize) // Skip records for previous pages
+                .Take(pageSize) // Take only the number of records for the current page
+                .ToListAsync();
         }
 
         public async Task<AdoptionContract> GetAdoptionContractById(int id)

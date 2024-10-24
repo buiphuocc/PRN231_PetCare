@@ -20,9 +20,9 @@ namespace PRN231_PetCare.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAdoptionContracts()
+        public async Task<IActionResult> GetAllAdoptionContracts([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
-            var adoptionContracts = await _adoptionContractService.GetAllAdoptionContractsAsync();
+            var adoptionContracts = await _adoptionContractService.GetAllAdoptionContractsAsync(page, pageSize);
             return Ok(adoptionContracts);
         }
 
@@ -44,14 +44,14 @@ namespace PRN231_PetCare.Controllers
             {
                 return BadRequest("Request body is null");
             }
-            await _adoptionContractService.CreateAdoptionContract(form);
-            return  Ok();
+           var result = await _adoptionContractService.CreateAdoptionContract(form);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdoptionContract(int id)
         {
-            var result = await _adoptionContractService.Delete(id);
+            var result = await _adoptionContractService.DeleteAdoptionContract(id);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
