@@ -12,7 +12,7 @@ namespace Application.IService
      public interface ICatService
     {
         Task<ServiceResponse<List<CatResDTO>>> GetAll(int pageNumber, int pageSize);
-        public Task<ServiceResponse<CatResDTO>> GetById(int materialId);
+        public Task<ServiceResponse<CatResDTO>> GetById(int id);
         public Task<ServiceResponse<CatResDTO>> Create(CatReqDTO createForm);
         public Task<ServiceResponse<CatResDTO>> Update(CatReqDTO updateForm, int id);
         public Task<ServiceResponse<bool>> Delete(int id);
