@@ -42,6 +42,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new VolunteerActivityConfiguration());
             modelBuilder.ApplyConfiguration(new EventConfiguration());
             modelBuilder.ApplyConfiguration(new EventParticipationConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityImageConfiguration());
         }
     }
 }
