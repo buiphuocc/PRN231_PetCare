@@ -10,6 +10,7 @@ using Infrastructure.ViewModels.UserDTO;
 using Infrastructure.ViewModels.AdoptionApplicationDTO;
 using Infrastructure.ViewModels.ShelterDTO;
 using Infrastructure.ViewModels.DonationDTO;
+using Infrastructure.ViewModels.ImageDTO;
 
 namespace Infrastructure.Mappers
 {
@@ -49,6 +50,9 @@ namespace Infrastructure.Mappers
 
             CreateMap<Donation, DonationReqDTO>().ReverseMap();
             CreateMap<Donation, DonationResDTO>().ReverseMap();
+
+
+            CreateMap<EntityImage, ImageDTO>().ReverseMap();
 
 
 

@@ -11,11 +11,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PRN231_PetCare;
+using CloudinaryDotNet;
+using Infrastructure.ViewModels.Cloud;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add configuration from appsettings.Development.json
 builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -30,6 +33,20 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+builder.Services.AddScoped<Cloudinary>(sp =>
+{
+    var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary").Get<CloudinarySettings>();
+    var cloudinaryAccount = new Account(
+        cloudinaryConfig.CloudName,
+        cloudinaryConfig.ApiKey,
+        cloudinaryConfig.ApiSecret
+    );
+    return new Cloudinary(cloudinaryAccount);
+});
+
+
+builder.Services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
