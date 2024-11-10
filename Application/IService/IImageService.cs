@@ -13,7 +13,7 @@ namespace Application.IService
     {
         Task<ServiceResponse<ImageDTO>> UploadImage(IFormFile file, int entityId, string entityType);
         Task<ServiceResponse<IEnumerable<ImageDTO>>> GetAllImageInfors();
-        Task<ServiceResponse<ImageDTO>> GetImageInforById(int id);
+        Task<ServiceResponse<ImageDTO>> GetImageInforById(int entityId, string entityType);
         Task<ServiceResponse<string>> DeleteImage(int id);
     }
 }
