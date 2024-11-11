@@ -49,6 +49,12 @@ public class CatProfileController : ControllerBase
         var result = await _catService.GetById(id);
         return result.Success ? Ok(result) : BadRequest(result);
     }
+    [HttpGet("cat-id/{id}")]
+    public async Task<IActionResult> GetCatProfileByCatId(int id)
+    {
+        var result = await _catService.GetByCatId(id);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
 
     //[Authorize(Roles = "Staff")]
     [HttpPut("{id}")]

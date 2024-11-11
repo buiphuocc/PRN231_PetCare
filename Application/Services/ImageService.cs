@@ -48,13 +48,13 @@ namespace Application.Services
             return response;
         }
 
-        public async Task<ServiceResponse<ImageDTO>> GetImageInforById(int id)
+        public async Task<ServiceResponse<ImageDTO>> GetImageInforById(int entityId, string entityType)
         {
             var serviceResponse = new ServiceResponse<ImageDTO>();
 
             try
             {
-                var image = await _imageRepo.GetImageInforById(id);
+                var image = await _imageRepo.GetImageInforById(entityId,entityType);
                 if (image == null)
                 {
                     serviceResponse.Success = false;

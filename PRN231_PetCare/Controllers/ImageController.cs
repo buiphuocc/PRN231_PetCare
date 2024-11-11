@@ -29,21 +29,24 @@ namespace PRN231_PetCare.Controllers
             return Ok(result);
         }
 
+
     
-    // [Authorize(Roles = "Staff,Admin,Customer")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetImageInforById(int id)
+        [HttpGet("{entityId}/{entityType}")]
+        public async Task<IActionResult> GetImageInfoByIdAndType(int entityId, string entityType)
         {
-            var result = await _imageService.GetImageInforById(id);
-            if (!result.Success)
+            var result = await _imageService.GetImageInforById(entityId, entityType);
+
+            if (result == null)
             {
-                return NotFound(result);
+                return NotFound("Image not found for the specified entity ID and type.");
             }
+
             return Ok(result);
         }
 
 
-        //[Authorize(Roles = "Staff,Admin")]
+
+  
         [HttpDelete("image/{id}")]
         public async Task<IActionResult> DeleteProductImage(int id)
         {
