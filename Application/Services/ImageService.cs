@@ -120,14 +120,17 @@ namespace Application.Services
 
                         if (uploadResult?.Url != null)
                         {
+                            // Check if there are existing images for the entity
+                            bool hasExistingImages = await _imageRepo.GetImageInforById(entityId);
+
                             // Create an EntityImage object to store in the database
                             var entityImage = new EntityImage
                             {
-                                EntityId = entityId,                  // Assign the user-provided EntityId
-                                EntityType = entityType,              // Assign the user-provided EntityType
+                                EntityId = entityId,                  
+                                EntityType = entityType,           
                                 ImageUrl = uploadResult.Url.ToString(),
                                 UploadAt = DateTime.UtcNow,
-                                IsPrimary = false
+                                IsPrimary = !hasExistingImages        
                             };
 
                             // Save the image entity in the database and get the saved entity

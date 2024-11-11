@@ -44,5 +44,12 @@ namespace Infrastructure.Repositories
             return entityImage;  
         }
 
+
+        public async Task<bool> GetImageInforById(int entityId)
+        {
+            return await _dbContext.EntityImages.AnyAsync(e => e.EntityId == entityId);
+        }
+
+
     }
 }

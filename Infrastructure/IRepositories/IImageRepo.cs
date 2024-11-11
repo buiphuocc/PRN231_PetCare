@@ -8,6 +8,8 @@ namespace Infrastructure.IRepositories
     {
         Task<List<EntityImage>> GetImagesByEntityIdAndType(int entityId, string entityType);
         Task<IEnumerable<EntityImage>> GetAllImageInfors();
+
+        Task<bool> GetImageInforById(int entityId);
         Task<EntityImage> AddImage(EntityImage entityImage);
         Task DeleteImage(int id);
 
