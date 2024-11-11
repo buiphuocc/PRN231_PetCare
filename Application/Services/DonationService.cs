@@ -161,7 +161,7 @@ namespace Application.Services
 
             try
             {
-                var donationExist = await _Repo.GetDonationByDonationId(id);
+                var donationExist = await _Repo.GetDonationById(id);
                 if (donationExist == null)
                 {
                     result.Success = false;
