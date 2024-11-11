@@ -6,7 +6,7 @@ namespace Infrastructure.IRepositories
 {
     public interface IImageRepo : IGenericRepo<EntityImage>
     {
-        Task<EntityImage> GetImageInforById(int EntityId , string EntityType);
+        Task<List<EntityImage>> GetImagesByEntityIdAndType(int entityId, string entityType);
         Task<IEnumerable<EntityImage>> GetAllImageInfors();
         Task<EntityImage> AddImage(EntityImage entityImage);
         Task DeleteImage(int id);

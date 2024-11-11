@@ -48,33 +48,36 @@ namespace Application.Services
             return response;
         }
 
-        public async Task<ServiceResponse<ImageDTO>> GetImageInforById(int entityId, string entityType)
+        public async Task<ServiceResponse<IEnumerable<ImageDTO>>> GetImageInforById(int entityId, string entityType)
         {
-            var serviceResponse = new ServiceResponse<ImageDTO>();
+            var serviceResponse = new ServiceResponse<IEnumerable<ImageDTO>>();
 
             try
             {
-                var image = await _imageRepo.GetImageInforById(entityId,entityType);
-                if (image == null)
+                var images = await _imageRepo.GetImagesByEntityIdAndType(entityId, entityType);
+
+                if (images == null || !images.Any())
                 {
                     serviceResponse.Success = false;
-                    serviceResponse.Message = "Image ID not found";
+                    serviceResponse.Message = "No images found for the specified entity.";
                 }
                 else
                 {
-                    var imageDTO = _mapper.Map<ImageDTO>(image);
-                    serviceResponse.Data = imageDTO;
+                    var imageDTOs = _mapper.Map<IEnumerable<ImageDTO>>(images);
+                    serviceResponse.Data = imageDTOs;
                     serviceResponse.Success = true;
+                    serviceResponse.Message = "Images retrieved successfully.";
                 }
             }
             catch (Exception ex)
             {
                 serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
+                serviceResponse.Message = $"An error occurred: {ex.Message}";
             }
 
             return serviceResponse;
         }
+
 
         public async Task<ServiceResponse<string>> DeleteImage(int id)
         {

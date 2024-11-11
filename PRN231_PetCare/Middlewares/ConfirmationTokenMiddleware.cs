@@ -35,14 +35,6 @@ namespace PRN231_PetCare.Middlewares
                         user.isActivated = true;
                         user.EmailConfirmToken = null;
                         await unitOfWork.SaveChangeAsync();
-                        //// Send registration success email
-                        //var emailSent = await Utils.SendMail.SendRegistrationSuccessEmail(user.Email);
-                        //if (!emailSent)
-                        //{
-                        //    // Log or handle the error as needed
-                        //    System.Console.WriteLine($"Failed to send registration success email to {user.Email}");
-                        //}
-                        //context.Response.Redirect($"https://zodiacjewerly.azurewebsites.net");
                         context.Response.Redirect("https://zodiacgems.vercel.app/login");
                         return;
                     }

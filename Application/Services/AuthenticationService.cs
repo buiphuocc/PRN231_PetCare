@@ -209,12 +209,7 @@ namespace Application.Services
             }
         }
 
-        // Example of a logging method
-
-
-
        
-
         public async Task<ServiceResponse<RegisterDTO>> RegisterAsync(RegisterDTO userObjectDTO)
         {
             var response = new ServiceResponse<RegisterDTO>();
@@ -348,11 +343,7 @@ namespace Application.Services
                 await _unitOfWork.UserRepository.AddAsync(userAccountRegister);
 
 
-                var confirmationLink =
-                    $"https://bbone-cqa7fseyejf8a5dh.canadacentral-01.azurewebsites.net/confirm?token={userAccountRegister.EmailConfirmToken}";
-                //var confirmationLink = $"https://your-api-domain/confirm?token={userAccountRegister.ConfirmationToken}&redirectUrl=https://your-frontend-domain/login";
-                //https://bbone-cqa7fseyejf8a5dh.canadacentral-01.azurewebsites.net
-                //https://zodiacjewerlyswd.azurewebsites.net
+                var confirmationLink =$"https://yourdomain.com/confirm?token={userAccountRegister.EmailConfirmToken}";
                 //SendMail
                 var emailSend = await SendMail.SendConfirmationEmail(userObject.Email, confirmationLink);
                 if (!emailSend)

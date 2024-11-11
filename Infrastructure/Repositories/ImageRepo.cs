@@ -16,10 +16,11 @@ namespace Infrastructure.Repositories
             _dbContext = context;
         }
 
-        public async Task<EntityImage> GetImageInforById(int entityId, string entityType)
+        public async Task<List<EntityImage>> GetImagesByEntityIdAndType(int entityId, string entityType)
         {
             return await _dbContext.EntityImages
-                .FirstOrDefaultAsync(e => e.EntityId == entityId && e.EntityType == entityType);
+                .Where(e => e.EntityId == entityId && e.EntityType == entityType)
+                .ToListAsync();
         }
 
 
