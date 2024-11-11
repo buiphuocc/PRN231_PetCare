@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.ViewModels.AppointmentDTO
 {
-    public class AppointmentDTO
+    public class AppointmentResponse
     {
         public int AppointmentId { get; set; }
         public int CatId { get; set; }

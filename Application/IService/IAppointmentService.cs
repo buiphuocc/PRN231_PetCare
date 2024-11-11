@@ -11,10 +11,10 @@ namespace Application.IService
 {
     public interface IAppointmentService
     {
-        Task<ServiceResponse<AppointmentDTO>> AddAppointment(AppointmentDTO appointmentDto);
-        Task<ServiceResponse<List<AppointmentDTO>>> GetAllAppointments();
-        Task<ServiceResponse<AppointmentDTO>> GetAppointmentById(int appointmentId);
-        Task<ServiceResponse<AppointmentDTO>> UpdateAppointment(AppointmentDTO updatedAppointmentDto);
+        Task<ServiceResponse<AppointmentResponse>> AddAppointment(AppointmentResponse appointmentDto);
+        Task<ServiceResponse<List<AppointmentResponse>>> GetAllAppointments();
+        Task<ServiceResponse<AppointmentResponse>> GetAppointmentById(int appointmentId);
+        Task<ServiceResponse<AppointmentResponse>> UpdateAppointment(AppointmentResponse updatedAppointmentDto, int appointmentId);
         Task<ServiceResponse<bool>> DeleteAppointmentById(int appointmentId);
     }
 }

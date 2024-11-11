@@ -35,7 +35,7 @@ namespace PRN231_PetCare.Controllers
                 //int.TryParse(userIdClaim, out int userId);
 
 
-                var response = await _appointmentService.AddAppointment(new AppointmentDTO
+                var response = await _appointmentService.AddAppointment(new AppointmentResponse
                 {
                     CatId = catId,
                     AppointmentDate = DateTime.UtcNow,
@@ -101,11 +101,19 @@ namespace PRN231_PetCare.Controllers
         }
 
         [HttpPut("update-appointment")]
-        public async Task<IActionResult> UpdateAppointments([FromBody] AppointmentDTO appointmentDto)
+        public async Task<IActionResult> UpdateAppointments([Required] int appointmentId, [FromBody] AppointmentRequest appointmentReq)
         {
             try
             {
-                var response = await _appointmentService.UpdateAppointment(appointmentDto);
+                var appointmentDto = new AppointmentResponse
+                {
+                    AppointmentId = appointmentId,
+                    AppointmentDate = appointmentReq.AppointmentDate,
+                    CatId = appointmentReq.CatId,
+                    UserId = appointmentReq.UserId,
+                    Purpose = appointmentReq.Purpose
+                };
+                var response = await _appointmentService.UpdateAppointment(appointmentDto, appointmentId);
 
                 return Ok(response);
             }

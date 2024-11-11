@@ -17,13 +17,12 @@ namespace Infrastructure.Repositories
         {
             _dbContext = context;
         }
-        public async Task<Appointment> AddAppointment(Appointment appointment)
+        public async Task AddAsync(Appointment appointment)
         {
             try
             {
                 await _dbContext.Appointments.AddAsync(appointment);
                 await _dbContext.SaveChangesAsync();
-                return appointment;
             }
             catch(Exception ex)
             {
@@ -31,7 +30,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<List<Appointment>> GetAllAppointments()
+        public async Task<List<Appointment>> GetAllAsync()
         {
             try
             {
@@ -43,7 +42,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<Appointment> GetAppointmentById(int appointmentId)
+        public async Task<Appointment> GetByIdAsync(int appointmentId)
         {
             try
             {
@@ -55,7 +54,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<Appointment> UpdateAppointment(Appointment updatedAppointment)
+        public async Task Update(Appointment updatedAppointment)
         {
             try
             {
@@ -72,8 +71,6 @@ namespace Infrastructure.Repositories
 
                 _dbContext.Appointments.Update(appointment);
                 await _dbContext.SaveChangesAsync();
-
-                return appointment;
             }
             catch (Exception ex)
             {
@@ -81,26 +78,23 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteAppointmentById(int appointmentId)
+        public async Task Remove(Appointment appointment)
         {
             try
             {
-                var appointment = await _dbContext.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
-
-                if (appointment == null)
-                {
-                    throw new Exception("Appointment not found");
-                }
 
                 _dbContext.Appointments.Remove(appointment);
                 await _dbContext.SaveChangesAsync();
-
-                return true;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error deleting appointment: {ex.Message}");
             }
+        }
+
+        public void UpdateE(Appointment entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

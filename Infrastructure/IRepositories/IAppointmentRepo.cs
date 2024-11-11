@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.IRepositories
 {
-    public interface IAppointmentRepo
+    public interface IAppointmentRepo : IGenericRepo<Appointment>
     {
-        Task<Appointment> AddAppointment(Appointment appointment);
-        Task<List<Appointment>> GetAllAppointments();
-        Task<Appointment> GetAppointmentById(int appointmentId);
-        Task<Appointment> UpdateAppointment(Appointment updatedAppointment);
-        Task<bool> DeleteAppointmentById(int appointmentId);
     }
 }

@@ -35,7 +35,7 @@ namespace Infrastructure.Mappers
             CreateMap<CatProfile, CatProfileReqDTO>().ReverseMap();
             CreateMap<CatProfile, CatProfileReSDTO>().ReverseMap();
 
-            CreateMap<Appointment, AppointmentDTO>().ReverseMap();
+            CreateMap<Appointment, AppointmentResponse>().ReverseMap();
 
             CreateMap<AdoptionContract, AdoptionContractReq>().ReverseMap();
             CreateMap<AdoptionContract, AdoptionContractRes>().ReverseMap();
