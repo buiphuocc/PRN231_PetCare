@@ -35,7 +35,7 @@ namespace PRN231_PetCare.Controllers
 			return Ok(response);
 		}
 
-		[HttpPost]
+        [HttpPost]
 		public async Task<IActionResult> CreateAdoptionApplication([FromBody] AdoptionApplicationReq req)
 		{
 			if (req == null) return BadRequest("Body is null");
@@ -81,6 +81,7 @@ namespace PRN231_PetCare.Controllers
 			
 			return Ok(response);
 		}
+
         [HttpGet("by-adopter/{adopterId}")]
         public async Task<IActionResult> GetApplicationsByAdopterId(int adopterId)
         {
@@ -90,7 +91,23 @@ namespace PRN231_PetCare.Controllers
 
             if (response == null || !response.Success)
             {
-                _logger.LogWarning("No applications found for adopter ID: {AdopterId}", adopterId);
+                _logger.LogWarning($"No applications found for adopter ID: {adopterId}", adopterId);
+                return NotFound("No applications found for the specified adopter.");
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("by-adopter-and-cat/{adopterId}")]
+        public async Task<IActionResult> GetByAdopterIdAndCatId(int adopterId, int catId)
+        {
+            if (adopterId <= 0) return BadRequest("Invalid adopter ID.");
+			if (catId <= 0) return BadRequest("Invalid cat ID.");
+
+            var response = await _service.GetApplicationByAdopterAndCatId(adopterId, catId);
+
+            if (response == null || !response.Success)
+            {
                 return NotFound("No applications found for the specified adopter.");
             }
 

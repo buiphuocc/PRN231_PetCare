@@ -248,5 +248,35 @@ namespace Application.Services
 
             return result;
         }
+
+        public async Task<ServiceResponse<AdoptionApplicationRes>> GetApplicationByAdopterAndCatId(int adopterId, int catId)
+        {
+            var result = new ServiceResponse<AdoptionApplicationRes>();
+
+            try
+            {
+                var listAll = await _repo.GetAllAsync();
+                var filtered = listAll.Where(a => a.AdopterId == adopterId && a.CatId == catId).FirstOrDefault();
+
+                if (filtered == null)
+				{
+                    result.Success = false;
+                    result.Message = "Adoption application of this user for this cat does not exist.";
+                }
+				else
+				{
+                    result.Success = true;
+                    result.Message = "Adoption application of this user for this cat found.";
+					result.Data = _mapper.Map<AdoptionApplicationRes>(filtered);
+				}
+            }
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
     }
 }
