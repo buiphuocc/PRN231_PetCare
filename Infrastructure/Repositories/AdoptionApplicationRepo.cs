@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
 		{
 			try
 			{
-				if (await _context.AdoptionApplications.FindAsync(adoptionApplication) == null)
+				if (await _context.AdoptionApplications.FindAsync(adoptionApplication.ApplicationId) == null)
 					throw new Exception("Application with this ID was not found.");
 				
 				_context.AdoptionApplications.Remove(adoptionApplication);
@@ -101,7 +101,7 @@ namespace Infrastructure.Repositories
 			}
 		}
 
-		public async Task<AdoptionApplication> GetByIdAsync(int id)
+		public async Task<AdoptionApplication?> GetByIdAsync(int id)
 		{
 			try
 			{

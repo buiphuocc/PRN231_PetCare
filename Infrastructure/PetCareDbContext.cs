@@ -16,6 +16,8 @@ namespace Infrastructure
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Cat> Cats { get; set; }
         public DbSet<CatProfile> CatProfiles { get; set; }
+
+        public DbSet<EntityImage> EntityImages { get; set; }
         public DbSet<AdoptionHistory> AdoptionHistories { get; set; }
         public DbSet<Shelter> Shelters { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
@@ -42,6 +44,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new VolunteerActivityConfiguration());
             modelBuilder.ApplyConfiguration(new EventConfiguration());
             modelBuilder.ApplyConfiguration(new EventParticipationConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityImageConfiguration());
         }
     }
 }

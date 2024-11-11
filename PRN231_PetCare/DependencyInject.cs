@@ -32,6 +32,8 @@ namespace PRN231_PetCare
             services.AddScoped<ICatProfileService, CatProfileService>();
             services.AddScoped<IAdoptionContractService, AdoptionContractService>();
 
+            services.AddScoped<IDonationService, DonationService>();
+
             services.AddHttpContextAccessor();
 
 
@@ -47,7 +49,7 @@ namespace PRN231_PetCare
             services.AddScoped<IAdoptionApplicationService, AdoptionApplicationService>();
             services.AddScoped<IShelterRepo, ShelterRepo>();
             services.AddScoped<IShelterService, ShelterService>();
-
+            services.AddScoped<IImageService, ImageService>();
 
 
             services.AddScoped<IUserRepo, UserRepo>();
