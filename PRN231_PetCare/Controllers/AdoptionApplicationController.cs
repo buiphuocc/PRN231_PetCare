@@ -17,7 +17,7 @@ namespace PRN231_PetCare.Controllers
 			_logger = logger;
 		}
 
-		[HttpGet("all")]
+		[HttpGet("")]
 		public async Task<IActionResult> GetAll()
 		{
 			var response = await _service.GetAllApplications();

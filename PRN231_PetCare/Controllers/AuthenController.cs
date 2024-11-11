@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PRN231_PetCare.Controllers
 {
-    [EnableCors("Allow")]
+    [EnableCors("AllowAll")]
     [Route("api/authentication")]
     [ApiController]
     public class AuthenController : BaseController
