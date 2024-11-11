@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PRN231_PetCare.Controllers
 {
 	[ApiController]
-	[Route("api/adoptionApplications")]
+	[Route("api/adoption-applications")]
 	public class AdoptionApplicationController : ControllerBase
 	{
 		private readonly IAdoptionApplicationService _service;
@@ -18,9 +18,9 @@ namespace PRN231_PetCare.Controllers
 		}
 
 		[HttpGet("")]
-		public async Task<IActionResult> GetAll()
+		public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
 		{
-			var response = await _service.GetAllApplications();
+			var response = await _service.GetAllApplications(pageNumber, pageSize);
 			if (response == null) return NotFound();
 
 			return Ok(response);
@@ -44,7 +44,7 @@ namespace PRN231_PetCare.Controllers
 			var response = await _service.CreateApplication(req);
 			if (response == null) return BadRequest();
 
-			return Ok(response);
+			return response.Success ? Ok() : BadRequest(response);
 		}
 
 		[HttpPut("{id}")]
@@ -60,7 +60,18 @@ namespace PRN231_PetCare.Controllers
 			return Ok(response);
 		}
 
-		[HttpDelete("{id}")]
+		[HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveAdoptionApplication(int id)
+        {
+            if (id <= 0) return BadRequest("Invalid ID.");
+
+            var response = await _service.ApproveAdoptionApplication(id);
+            if (response == null) return NotFound();
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteAdoptionApplication(int id)
 		{
 			if (id <= 0) return BadRequest("Invalid ID.");

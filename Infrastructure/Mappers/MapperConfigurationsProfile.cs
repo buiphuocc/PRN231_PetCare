@@ -49,8 +49,17 @@ namespace Infrastructure.Mappers
             CreateMap<Shelter, ShelterResDTO>().ReverseMap();
 
             CreateMap<Donation, DonationReqDTO>().ReverseMap();
-            CreateMap<Donation, DonationResDTO>().ReverseMap();
+            CreateMap<Donation, DonationResDTO>()
+            .ForMember(dest => dest.DonorName, opt => opt.MapFrom(src => src.Donor.UserProfile.Name))
+            .ReverseMap()
+            .ForPath(src => src.Donor.UserProfile.Name, opt => opt.MapFrom(dest => dest.DonorName));
 
+
+
+
+
+            CreateMap<Account, DonationReqDTO>().ReverseMap();
+            CreateMap<Account, DonationResDTO>().ReverseMap();
 
             CreateMap<EntityImage, ImageDTO>().ReverseMap();
 

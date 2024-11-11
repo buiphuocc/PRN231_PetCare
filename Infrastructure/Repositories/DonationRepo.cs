@@ -23,6 +23,9 @@ namespace Infrastructure.Repositories
         public async Task<List<Donation>> GetAllDonation(int pageNumber, int pageSize)
         {
             return await _context.Donations
+                .Include(s => s.Donor)
+                .ThenInclude(s => s.UserProfile)
+                .Include(s => s.Shelter)
                 .Skip((pageNumber - 1) * pageSize) // Skip records for previous pages
                 .Take(pageSize) // Take only the number of records for the current page
                 .ToListAsync();
@@ -30,7 +33,19 @@ namespace Infrastructure.Repositories
 
         public async Task<Donation?> GetDonationByDonationId(int id)
         {
-            return await _context.Donations.Where(m => m.DonationId == id).FirstOrDefaultAsync();
+            return await _context.Donations
+                            .Include(s=> s.Donor)
+                            .ThenInclude(s => s.UserProfile)
+                            .Include(s => s.Shelter).Where(m => m.DonorId == id).FirstOrDefaultAsync();
+        }
+
+
+        public async Task<Donation?> GetDonationById(int id)
+        {
+            return await _context.Donations
+                            .Include(s => s.Donor)
+                            .ThenInclude(s => s.UserProfile)
+                            .Include(s => s.Shelter).Where(m => m.DonationId == id).FirstOrDefaultAsync();
         }
 
         public async Task<Donation?> GetDonationByDonationShielterId(int id)

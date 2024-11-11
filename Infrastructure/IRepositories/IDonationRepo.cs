@@ -12,6 +12,7 @@ namespace Infrastructure.IRepositories
         Task<List<Donation>> GetAllDonation(int pageNumber, int pageSize);
         Task<Donation> GetDonationByDonationId(int id);
 
+        Task<Donation> GetDonationById(int id);
         Task<Donation> GetDonationByDonationShielterId(int id);
         Task<Donation> GetDonationByDonorId(int id);
 

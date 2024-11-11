@@ -12,7 +12,8 @@ namespace Infrastructure.ViewModels.AdoptionApplicationDTO
 		public int CatId { get; set; }
 		public int AdopterId { get; set; }
 		public int AdoptionFee { get; set; }
-		public DateTime ApplicationDate { get; set; }
+		public string ApplicationStatus { get; set; } = "Pending";
+        public DateTime ApplicationDate { get; set; }
 		public DateTime? AdoptionDate { get; set; }
 
 	}
