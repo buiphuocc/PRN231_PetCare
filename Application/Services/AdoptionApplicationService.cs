@@ -10,11 +10,13 @@ namespace Application.Services
 	public class AdoptionApplicationService : IAdoptionApplicationService
 	{
 		private readonly IAdoptionApplicationRepo _repo;
+		private readonly ICatRepo _catRepo;
 		private readonly IMapper _mapper;
 
-		public AdoptionApplicationService(IAdoptionApplicationRepo repo, IMapper mapper)
+		public AdoptionApplicationService(IAdoptionApplicationRepo repo, ICatRepo catRepo, IMapper mapper)
 		{
 			_repo = repo;
+			_catRepo = catRepo;	
 			_mapper = mapper;
 		}
 
@@ -173,5 +175,47 @@ namespace Application.Services
 
 			return result;
 		}
-	}
+        public async Task<ServiceResponse<List<AdoptionHistoryRes>>> GetAllApplicationsByAdopterId(int adopterId)
+        {
+            var result = new ServiceResponse<List<AdoptionHistoryRes>>();
+            try
+            {
+                var listAll = await _repo.GetAllAsync();
+                var filteredList = listAll.Where(a => a.AdopterId == adopterId).ToList();
+
+                var adoptionList = new List<AdoptionHistoryRes>();
+
+                foreach (var app in filteredList)
+                {
+                    // Retrieve cat's name from the Cat repository based on CatId
+                    var cat = await _catRepo.GetByIdAsync(app.CatId);
+                    var catName = cat != null ? cat.Name : "Unknown";
+
+                    // Map to the new DTO
+                    adoptionList.Add(new AdoptionHistoryRes
+                    {
+                        ApplicationId = app.ApplicationId,
+                        AdopterId = app.AdopterId,
+                        AdoptionFee = app.AdoptionFee,
+                        ApplicationDate = app.ApplicationDate,
+                        ApplicationStatus = app.ApplicationStatus,
+                        AdoptionDate = app.AdoptionDate,
+                        CatName = catName
+                    });
+                }
+
+                result.Data = adoptionList;
+                result.Success = true;
+            }
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.Message = e.InnerException != null
+                    ? e.InnerException.Message + "\n" + e.StackTrace
+                    : e.Message + "\n" + e.StackTrace;
+            }
+
+            return result;
+        }
+    }
 }

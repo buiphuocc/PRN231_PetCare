@@ -1,5 +1,6 @@
 ﻿using Application.IService;
 using AutoMapper;
+using CloudinaryDotNet;
 using Domain.Entities;
 using Infrastructure.IRepositories;
 using Infrastructure.ServiceResponse;
@@ -17,12 +18,14 @@ namespace Application.Services
         private readonly IAppointmentRepo _appointmentRepo;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly ICatRepo _catRepo;
 
-        public AppointmentService(IAppointmentRepo appointmentRepo, IMapper mapper, IEmailService emailService)
+        public AppointmentService(IAppointmentRepo appointmentRepo, IMapper mapper, IEmailService emailService, ICatRepo catRepo)
         {
             _appointmentRepo = appointmentRepo;
             _mapper = mapper;
             _emailService = emailService;
+            _catRepo = catRepo;
         }
 
         public async Task<ServiceResponse<AppointmentResponse>> AddAppointment(AppointmentResponse appointmentDto)
@@ -159,6 +162,48 @@ namespace Application.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public async Task<ServiceResponse<List<AppointHistory>>> GetAllAppointmentsByAdopterId(int adopterId)
+        {
+            var response = new ServiceResponse<List<AppointHistory>>();
+
+            try
+            {
+                var appointments = await _appointmentRepo.GetAllAsync();
+
+                // Filter appointments by adopter ID
+                var filteredAppointments = appointments.Where(a => a.UserId == adopterId).ToList();
+
+                // Create a list to hold the enriched response
+                var appointmentResponses = new List<AppointHistory>();
+
+                foreach (var appointment in filteredAppointments)
+                {
+                    var cat = await _catRepo.GetByIdAsync(appointment.CatId);
+                    var catName = cat != null ? cat.Name : "Unknown";
+
+                    // Map to the new DTO
+                    appointmentResponses.Add(new AppointHistory
+                    {
+                        AppointmentId = appointment.AppointmentId,
+                        CatName = catName,
+                        UserId = appointment.UserId,
+                        AppointmentDate = appointment.AppointmentDate,
+                        Purpose = appointment.Purpose
+                    });
+                }
+
+                response.Data = appointmentResponses;
+                response.Success = true;
+                response.Message = "Retrieve successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Failed to retrieve appointments: {ex.Message}";
+            }
+
+            return response;
         }
     }
 }

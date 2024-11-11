@@ -45,11 +45,11 @@ namespace PRN231_PetCare.Controllers
 
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, new {message = ex.Message } );
+                return StatusCode(500, new { message = ex.Message });
             }
-                
+
         }
 
         [HttpGet("{appointmentId}")]
@@ -128,6 +128,20 @@ namespace PRN231_PetCare.Controllers
         public IActionResult GetPurposeDropdownOptions()
         {
             return Ok(AppointmentPurposesString.Options);
+        }
+        [HttpGet("get-by-adopter/{adopterId}")]
+        public async Task<IActionResult> GetAppointmentsByAdopter(int adopterId)
+        {
+            try
+            {
+                var response = await _appointmentService.GetAllAppointmentsByAdopterId(adopterId);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }

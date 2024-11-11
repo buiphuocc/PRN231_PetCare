@@ -15,5 +15,6 @@ namespace Application.IService
 		Task<ServiceResponse<AdoptionApplicationRes>> GetApplicationById(int id);
 		Task<ServiceResponse<AdoptionApplicationRes>> UpdateApplication(AdoptionApplicationReq req, int id);
 		Task<ServiceResponse<bool>> RemoveApplication(int id);
+		Task<ServiceResponse<List<AdoptionHistoryRes>>> GetAllApplicationsByAdopterId(int adopterId);
 	}
 }

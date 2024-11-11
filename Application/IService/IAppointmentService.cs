@@ -16,5 +16,7 @@ namespace Application.IService
         Task<ServiceResponse<AppointmentResponse>> GetAppointmentById(int appointmentId);
         Task<ServiceResponse<AppointmentResponse>> UpdateAppointment(AppointmentResponse updatedAppointmentDto, int appointmentId);
         Task<ServiceResponse<bool>> DeleteAppointmentById(int appointmentId);
+
+        Task<ServiceResponse<List<AppointHistory>>> GetAllAppointmentsByAdopterId(int adopterId);
     }
 }

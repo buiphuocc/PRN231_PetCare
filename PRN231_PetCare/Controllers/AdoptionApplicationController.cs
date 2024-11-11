@@ -70,5 +70,20 @@ namespace PRN231_PetCare.Controllers
 			
 			return Ok(response);
 		}
-	}
+        [HttpGet("by-adopter/{adopterId}")]
+        public async Task<IActionResult> GetApplicationsByAdopterId(int adopterId)
+        {
+            if (adopterId <= 0) return BadRequest("Invalid adopter ID.");
+
+            var response = await _service.GetAllApplicationsByAdopterId(adopterId);
+
+            if (response == null || !response.Success)
+            {
+                _logger.LogWarning("No applications found for adopter ID: {AdopterId}", adopterId);
+                return NotFound("No applications found for the specified adopter.");
+            }
+
+            return Ok(response);
+        }
+    }
 }
