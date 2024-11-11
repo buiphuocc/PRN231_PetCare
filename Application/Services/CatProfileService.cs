@@ -83,6 +83,35 @@ namespace Application.Services
 
             return result;
         }
+        public async Task<ServiceResponse<CatProfileReSDTO>> GetByCatId(int id)
+        {
+            var result = new ServiceResponse<CatProfileReSDTO>();
+            try
+            {
+                var cat = await _Repo.GetCatPByCatId(id);
+                if (cat == null)
+                {
+                    result.Success = false;
+                    result.Message = "Cat Profile not found";
+                }
+                else
+                {
+                    var resMaterial = _mapper.Map<CatProfile, CatProfileReSDTO>(cat);
+
+                    result.Data = resMaterial;
+                    result.Success = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.Message = e.InnerException != null
+                    ? e.InnerException.Message + "\n" + e.StackTrace
+                    : e.Message + "\n" + e.StackTrace;
+            }
+
+            return result;
+        }
 
         public async Task<ServiceResponse<CatProfileReSDTO>> Create(CatProfileReqDTO createForm)
         {
