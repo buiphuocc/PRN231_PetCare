@@ -11,9 +11,10 @@ namespace Application.IService
 	public interface IAdoptionApplicationService
 	{
 		Task<ServiceResponse<AdoptionApplicationRes>> CreateApplication(AdoptionApplicationReq req);
-		Task<ServiceResponse<List<AdoptionApplicationRes>>> GetAllApplications();
+		Task<ServiceResponse<List<AdoptionApplicationRes>>> GetAllApplications(int pageNumber, int pageSize);
 		Task<ServiceResponse<AdoptionApplicationRes>> GetApplicationById(int id);
 		Task<ServiceResponse<AdoptionApplicationRes>> UpdateApplication(AdoptionApplicationReq req, int id);
 		Task<ServiceResponse<bool>> RemoveApplication(int id);
+		Task<ServiceResponse<bool>> ApproveAdoptionApplication(int id);
 	}
 }

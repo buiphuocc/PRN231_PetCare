@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Account> GetUserByEmailAddressAndPasswordHash(string email, string passwordHash)
         {
-            Console.WriteLine(_dbContext.Accounts);
+
             var user = await _dbContext.Accounts
                 .FirstOrDefaultAsync(record => record.Email.Equals(email));
 
@@ -37,6 +37,8 @@ namespace Infrastructure.Repositories
             {
                 throw new Exception("Email is not correct");
             }
+
+            Console.WriteLine(user.PasswordHash + " compare to " + passwordHash);
 
             if (user.PasswordHash != passwordHash)
             {

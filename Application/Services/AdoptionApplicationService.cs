@@ -18,7 +18,38 @@ namespace Application.Services
 			_mapper = mapper;
 		}
 
-		public async Task<ServiceResponse<AdoptionApplicationRes>> CreateApplication(AdoptionApplicationReq req)
+        public async Task<ServiceResponse<bool>> ApproveAdoptionApplication(int id)
+        {
+            var result = new ServiceResponse<bool>();
+
+            try
+            {
+                if (await _repo.GetByIdAsync(id) == null)
+                {
+                    result.Success = false;
+                    result.Message = "Application not found.";
+                    result.Data = false;
+                }
+                else
+                {
+                    await _repo.ApproveAdoptionApplication(id);
+
+                    result.Success = true;
+                    result.Message = "Approved successfully";
+                    result.Data = true;
+                }
+            }
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.Message = e.Message;
+				result.Data = false;
+            }
+
+            return result;
+        }
+
+        public async Task<ServiceResponse<AdoptionApplicationRes>> CreateApplication(AdoptionApplicationReq req)
 		{
 			var result = new ServiceResponse<AdoptionApplicationRes>();
 			
@@ -56,12 +87,12 @@ namespace Application.Services
 			return result;
 		}
 
-		public async Task<ServiceResponse<List<AdoptionApplicationRes>>> GetAllApplications()
+		public async Task<ServiceResponse<List<AdoptionApplicationRes>>> GetAllApplications(int pageNumber, int pageSize)
 		{
 			var result = new ServiceResponse<List<AdoptionApplicationRes>>();
 			try
 			{
-				var contractEntities = await _repo.GetAllAsync();
+				var contractEntities = await _repo.GetAllAsync(pageNumber, pageSize);
 
 				var adoptionList = _mapper.Map<List<AdoptionApplicationRes>>(contractEntities);
 

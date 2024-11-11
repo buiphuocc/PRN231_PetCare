@@ -54,6 +54,7 @@ namespace PRN231_PetCare
 
 
             services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

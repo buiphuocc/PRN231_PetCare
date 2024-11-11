@@ -144,5 +144,54 @@ namespace Infrastructure.Repositories
 				throw new Exception(ex.Message);
 			}
 		}
-	}
+
+        public async Task ApproveAdoptionApplication(int id)
+        {
+            try
+            {
+                var application = await _context.AdoptionApplications
+                                                .AsTracking()
+                                                .FirstOrDefaultAsync(a => a.ApplicationId == id)
+                                                ?? throw new Exception("Application does not exist");
+
+                var otherApplicationsOfCat = await _context.AdoptionApplications
+                                                           .AsNoTracking()  
+                                                           .Where(a => a.CatId == application.CatId && a.ApplicationId != id)
+                                                           .ToListAsync();
+
+                application.ApplicationStatus = "Approved";
+
+                foreach (var otherApplication in otherApplicationsOfCat)
+                {
+                    otherApplication.ApplicationStatus = "Rejected";
+                    _context.AdoptionApplications.Update(otherApplication); 
+                }
+
+                _context.AdoptionApplications.Update(application);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // You can log the exception to make debugging easier
+                // Log.Error(ex, "Error approving adoption application");
+
+                throw new Exception($"An error occurred while approving the adoption application: {ex.Message}");
+            }
+        }
+
+        public async Task<IEnumerable<AdoptionApplication>> GetAllAsync(int pageNumber, int pageSize)
+        {
+			try
+			{
+				return await _context.AdoptionApplications.Skip((pageNumber - 1) * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
+			}
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+    }
 }
