@@ -1,4 +1,5 @@
 ﻿using Application.IService;
+using Infrastructure.ViewModels.ImageDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -76,8 +77,23 @@ namespace PRN231_PetCare.Controllers
 
             return Ok(result); // Return success response with the uploaded image info
         }
+        [HttpPost("upload-from-url")]
+        public async Task<IActionResult> UploadImagesFromUrls([FromBody] ImageUploadRequest uploadRequest)
+        {
+            if (uploadRequest?.ImageUrls == null || !uploadRequest.ImageUrls.Any())
+            {
+                return BadRequest("No image URLs provided.");
+            }
 
+            // Call the service method to upload the images from the URLs
+            var result = await _imageService.UploadImageFromUrl(uploadRequest);
 
+            if (!result.Success)
+            {
+                return BadRequest(result); // Return the error response from the service
+            }
 
+            return Ok(result); // Return success response with the uploaded image info
+        }
     }
 }

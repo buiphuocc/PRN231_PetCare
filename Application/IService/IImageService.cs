@@ -12,6 +12,7 @@ namespace Application.IService
     public interface IImageService
     {
         Task<ServiceResponse<ImageDTO>> UploadImage(IFormFile file, int entityId, string entityType);
+        Task<ServiceResponse<List<string>>> UploadImageFromUrl(ImageUploadRequest uploadRequests);
         Task<ServiceResponse<IEnumerable<ImageDTO>>> GetAllImageInfors();
         Task<ServiceResponse<IEnumerable<ImageDTO>>> GetImageInforById(int entityId, string entityType);
         Task<ServiceResponse<string>> DeleteImage(int id);

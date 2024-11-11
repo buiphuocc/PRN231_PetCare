@@ -7,6 +7,7 @@ using Infrastructure.IRepositories;
 using Infrastructure.ServiceResponse;
 using Infrastructure.ViewModels.ImageDTO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -164,6 +165,46 @@ namespace Application.Services
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<string>>> UploadImageFromUrl(ImageUploadRequest uploadRequest)
+        {
+            var response = new ServiceResponse<List<string>> { Data = new List<string>() };
+            try
+            {
+                // Check if there are existing images for this entity to set primary status
+                bool hasExistingImages = await _imageRepo.GetImageInforById(uploadRequest.EntityId);
 
+                // Loop through each image URL in the request
+                foreach (var imageUrl in uploadRequest.ImageUrls)
+                {
+                    // Create a new image entity for each image URL
+                    var entityImage = new EntityImage
+                    {
+                        EntityId = uploadRequest.EntityId,
+                        EntityType = uploadRequest.EntityType,
+                        ImageUrl = imageUrl,
+                        UploadAt = DateTime.UtcNow,
+                        IsPrimary = !hasExistingImages // Set primary if this is the first image
+                    };
+
+                    // Save the image entity to the database
+                    var savedImage = await _imageRepo.AddImage(entityImage);
+
+                    // Add the saved image URL to the response list
+                    response.Data.Add(savedImage.ImageUrl);
+
+                    // After the first image is saved, set hasExistingImages to true to avoid multiple primaries
+                    hasExistingImages = true;
+                }
+
+                response.Success = true;
+                response.Message = "Images uploaded successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
     }
 }
