@@ -46,7 +46,7 @@ namespace Infrastructure.Repositories
         {
             try
             {
-                return await _dbContext.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
+                return await _dbContext.Appointments.Include(u=> u.User).Include(c=>c.Cat).FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
             }
             catch (Exception ex)
             {

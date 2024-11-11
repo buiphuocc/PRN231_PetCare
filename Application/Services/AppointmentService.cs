@@ -16,11 +16,13 @@ namespace Application.Services
     {
         private readonly IAppointmentRepo _appointmentRepo;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public AppointmentService(IAppointmentRepo appointmentRepo, IMapper mapper)
+        public AppointmentService(IAppointmentRepo appointmentRepo, IMapper mapper, IEmailService emailService)
         {
             _appointmentRepo = appointmentRepo;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<ServiceResponse<AppointmentResponse>> AddAppointment(AppointmentResponse appointmentDto)
@@ -35,6 +37,17 @@ namespace Application.Services
                 if(appointmentCheck != null)
                 {
                     var responseData = _mapper.Map<AppointmentResponse>(appointmentCheck);
+
+                    response.Message = "Add successfully";
+                    response.Success = true;
+                    response.Data = responseData;
+
+                    // Prepare email content
+                    var subject = "Appointment Confirmation";
+                    var body = $"Hello, <br/>Your appointment for '{appointmentDto.Purpose}' has been scheduled on {appointmentDto.AppointmentDate}. Thank you!";
+
+                    // Send email notification
+                    await _emailService.SendEmailAsync(appointmentCheck.User.Email, subject, body);
 
                     response.Message = "Add successfully";
                     response.Success = true;

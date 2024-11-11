@@ -31,6 +31,7 @@ namespace PRN231_PetCare
             services.AddScoped<ICatService, CatService>();
             services.AddScoped<ICatProfileService, CatProfileService>();
             services.AddScoped<IAdoptionContractService, AdoptionContractService>();
+            services.AddScoped<IEmailService,  EmailService>(); 
 
             services.AddScoped<IDonationService, DonationService>();
 

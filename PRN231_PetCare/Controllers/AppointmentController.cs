@@ -26,9 +26,9 @@ namespace PRN231_PetCare.Controllers
 
 
         [HttpPost("create-appointment")]
-        public async Task<IActionResult> AddAppointment([Required] int catId, [Required] string purpose, [Required] int userId)
+        public async Task<IActionResult> AddAppointment([FromBody] AppointmentRequest request)
         {
-            if (catId == null || purpose == null) BadRequest("catId and purpose required");
+            if (request == null) BadRequest("No empty request");
             try
             {
                 //var userIdClaim = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
@@ -37,10 +37,10 @@ namespace PRN231_PetCare.Controllers
 
                 var response = await _appointmentService.AddAppointment(new AppointmentResponse
                 {
-                    CatId = catId,
-                    AppointmentDate = DateTime.UtcNow,
-                    UserId = userId,
-                    Purpose = purpose
+                    CatId = request.CatId,
+                    AppointmentDate = request.AppointmentDate,
+                    UserId = request.UserId,
+                    Purpose = request.Purpose
                 });
 
                 return Ok(response);

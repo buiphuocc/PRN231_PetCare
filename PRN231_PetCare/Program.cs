@@ -13,6 +13,8 @@ using System.Text;
 using PRN231_PetCare;
 using CloudinaryDotNet;
 using Infrastructure.ViewModels.Cloud;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,8 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+
 
 // Add CORS services
 builder.Services.AddCors(options =>
@@ -130,6 +134,24 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+// Configure the SMTP client settings
+builder.Services.AddSingleton<SmtpClient>(provider =>
+{
+    var smtpClient = new SmtpClient
+    {
+        Host = builder.Configuration["EmailSettings:SmtpHost"], // e.g., "smtp.gmail.com"
+        Port = int.Parse(builder.Configuration["EmailSettings:SmtpPort"]), // e.g., 587
+        Credentials = new NetworkCredential(
+            builder.Configuration["EmailSettings:Username"], // Your email address
+            builder.Configuration["EmailSettings:Password"]  // Your email password or app-specific password
+        ),
+        EnableSsl = bool.Parse(builder.Configuration["EmailSettings:EnableSsl"]) // true or false depending on the provider
+    };
+
+    return smtpClient;
+});
+
 
 var app = builder.Build();
 
