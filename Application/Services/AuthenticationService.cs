@@ -230,7 +230,7 @@ namespace Application.Services
                 userAccountRegister.EmailConfirmToken = Guid.NewGuid().ToString();
 
                 // Set initial activation status
-                userAccountRegister.isActivated = false;
+                userAccountRegister.isActivated = true;
                 userAccountRegister.Role = "Customer";
 
                 // Generate a refresh token
@@ -240,7 +240,7 @@ namespace Application.Services
                 await _unitOfWork.UserRepository.AddAsync(userAccountRegister);
 
                 // Send email confirmation link
-                var confirmationLink = $"https://yourdomain.com/confirm?token={userAccountRegister.EmailConfirmToken}";
+                var confirmationLink = $"http://localhost:5211/swagger/confirm?token={userAccountRegister.EmailConfirmToken}";
                 var emailSent = await SendMail.SendConfirmationEmail(userObjectDTO.Email, confirmationLink);
                 if (!emailSent)
                 {
